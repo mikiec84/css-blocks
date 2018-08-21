@@ -212,10 +212,13 @@ However, the primary method for any importer is its `import()` method. `import()
 
 For any custom importers that require extra data to be passed by the end-user, the `importerData` CSS BLocks config option has been specially reserved as a namespaced location for extra importer data to be passed. All importer methods are passsed the full CSS Blocks config object as their last argument.
 
-CSS Blocks ships with two (2) pre-defined importers.
+CSS Blocks ships with one (1) pre-defined importers.
 
- 1. `NodeJsImporter`: This is the default importer used by CSS Blocks if no other is provided. It enables `@block-reference`s to resolve relative and absolute file references
- 2. `PathAliasImporter`: The PathAliasImporter is a replacement for the fileystem importer. Relative import paths are first checked to see if they match an existing file relative to the from identifier (when provided). Then if the relative import path has a first segment that is any of the aliases provided the path will be made absolute using that alias's path location. Finally any relative path is resolved against the `rootDir` specified in the CSS Block configuration options.
+ 1. `NodeJsImporter`: This is the default importer used by CSS Blocks if no other is provided. It enables `@block-reference`s to resolve relative and absolute file references. Paths are resolved using the following algorithm:
+  - If an absolute path, resolve to the specified location.
+  - If a relative path, attempt to resolve relative to the containing file.
+  - If relative paths do not match a file on disk, test if the relative import path has a first segment that matches any of the aliases provided. The path will be made absolute using that alias's path location.
+  - Finally, any relative path is resolved against the `rootDir` specified in the CSS Block configuration options.
 
 ## /src/util
 Utilities used inside the CSS Blocks repo. These are:
